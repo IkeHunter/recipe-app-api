@@ -1,0 +1,20 @@
+version: '3.9'
+
+# app: name of service
+# build: use current directory as root, set as dev env
+# ports: access network server
+# volumes: map directory on local system to container, automatically sync
+  # this is important as it allows auto 2 way sync
+# command: command for default run
+services:
+  app:
+    build:
+      context: .
+      args:
+        - DEV=true
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./app:/app
+    command: >
+      sh -c 'python manage.py runserver 0.0.0.0:8000'
