@@ -61,3 +61,11 @@ Stop Server:
     * run *"Run code with linting"* command to test
 6. Create Django project with CLI command *"Create Django Project with Docker in CLI"* to create Django base project in docker image, this will copy to local system in app/ dir
 7. Run project with docker compose with *docker-compose up*
+
+## Explanations
+
+### For testing command
+```
+docker-compose run --rm app sh -c "python manage.py test"
+```
+docker-compose run: this is the run command in docker compose, 
