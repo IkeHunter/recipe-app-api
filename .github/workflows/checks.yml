@@ -18,6 +18,6 @@ jobs:
       - name: Checkout  # runs if prev was successful, sequential
         uses: actions/checkout@v2  # 'checkouts' code so it can be accessed
       - name: Test
-        run: docker-compose run --rm app sh -c "python manage.py test"  # runs unit test for code
+        run: docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test"  # runs unit test for code
       - name: Lint
         run: docker-compose run --rm app sh -c "flake8"  # runs linting
