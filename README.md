@@ -98,6 +98,17 @@ At this point you will have a Django *project*, but in order to create the main 
 12. Create `wait_for_db` command by creating `/management/commands/[command].py` file inside core
 13. Add `wait_for_db` command and `migrate` command to `docker-compose.yml`.
 
+### Setting up Auto Documentation
+14. Install `drf-spectacular` by adding it to `requirements.txt`, then add it to `settings.py`.
+15. Allow it to access api endpoints by adding the following code to `settings.py`:
+```python
+REST_FRAMEWORK = {
+    # configure rest framework to auto generate api schema
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+```
+16. Add `drf_spectacular` and Swagger to `app/urls.py` to enable endpoints for api docs
+
 ## Explanations
 
 ### For testing command
@@ -133,6 +144,64 @@ This is Django's preferred package to use to connect with postgres. For dev, ins
 
 It is recommended that the packages needed for it's install are deleted after install.
 
+## General Notes
+### Authentication
+There are 4 types of authentication:
+1. Basic
+    - sends the username and pass with each req
+    - not recommended, insecure
+2. Token
+    - commonly used,
+    - it authenticates on backend and provides a token for client to use in req header
+    - this is the one used in course
+3. JSON Web Token (JWT)
+    - more complex version of token
+    - used for scalable applications, but requires more libraries to be imported/used
+    - uses things like refresh tokens to reduce db calls in relational db
+4. Session
+    - store auth details in cookies
+    - very common, used with django admin
+
+### Token Authentication
+- Django includes functionality for this type out of the box
+- It works by doing the following:
+    1. User logs in, server creates a token
+    2. server send token to client to store (cookie, localstorage, etc)
+    3. client sends token in http header for each request
+- pros
+    - supported by django out-of-box
+    - simple to use
+    - supported by all clients
+    - avoid sending username/password each time
+- cons
+    - token needs to be secure or it can be used to hack account
+    - requires db to store token/db (unlike JWT)
+- why no logout api?
+    - it's unreliable, no guarantee it's going to be called
+    - it's handled on client side
+
+### API Views vs Viewsets
+What is a view?
+- handles request from url
+- DRF uses classes to build off this functionality
+- APIView and Viewsets are DRF base classes
+
+APIView
+- focused around http methods
+- class methods for http methods
+    - GET, POST, PUT, PATCH, DELETE
+- provide flexibility for urls and logic
+- useful for non CRUD apis
+    - for logic like auth, jobs, external apis
+    - good when not mapped to model
+
+Viewsets
+- focused around CRUD actions
+    - retrieve, list, update, partial update, destroy
+- map to django models
+- user routers to generate urls
+- provides basic CRUD ops out of the box
+
 ## Bugs
 
 ### psycopg2 not found
@@ -141,4 +210,3 @@ It is recommended that the packages needed for it's install are deleted after in
 This issue happened when trying to run/build docker for the first time with psycopg2
 These were the original temp packages that should've been installed: `build-base` `postgresql-dev` `musl-dev`
 These are the packages that allowed docker to run: `postgresql-dev` `gcc` `python3-dev` `musl-dev`
-
