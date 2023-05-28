@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_spectacular',  # used for testing
     'user',
+    'recipe',
 ]
 
 MIDDLEWARE = [

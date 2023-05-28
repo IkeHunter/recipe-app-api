@@ -21,9 +21,9 @@ ARG DEV=false
 
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
-    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache postgresql-client jpeg-dev && \
     apk add --update --no-cache --virtual .tmp-build-deps \
-        postgresql-dev gcc python3-dev musl-dev && \
+        postgresql-dev gcc python3-dev musl-dev zlib zlib-dev && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
@@ -38,7 +38,7 @@ RUN python -m venv /py && \
 # 1. create virtual env
 # 2. install and upgrade pip inside virtual env
 # 3. apk install postgres client package to be able to work with postgres
-# 4. apk install the following packages (build-base, postgresql-dev musl-dev) into a virtual dependency called .tmp-build-deps to delete later. 
+# 4. apk install the following packages (build-base, postgresql-dev musl-dev) into a virtual dependency called .tmp-build-deps to delete later.
     # These packages are just needed to install postgres on django, and not needed to run it, so delete them after install
 # 4. install list of requirements in virtual env
     # 3b. install dev requirements if in dev mode
