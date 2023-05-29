@@ -19,6 +19,8 @@ from drf_spectacular.views import (
 )
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,3 +36,9 @@ urlpatterns = [
     path('api/recipe/', include('recipe.urls')),
 
 ]
+
+if settings.DEBUG:  # when in dev mode
+    urlpatterns += static(  # allow dev server to serve media files
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT,
+    )

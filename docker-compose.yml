@@ -18,8 +18,9 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app
+      - dev-static-data:/vol/web  # maps volume to volume directory, enables persistent data
     command: >
-      sh -c "python manage.py wait_for_db && 
+      sh -c "python manage.py wait_for_db &&
             python manage.py migrate &&
             python manage.py runserver 0.0.0.0:8000"
     environment:
@@ -29,7 +30,7 @@ services:
       - DB_PASS=changeme
     depends_on:
       - db
-  
+
   # image: postgres: 13-alpine is a light weight version of postres provided by docker
   # volumes: sets the volume to be used
   # environment: sets environment variables, initializes db with those
@@ -41,9 +42,10 @@ services:
       - POSTGRES_DB=devdb
       - POSTGRES_USER=devuser
       - POSTGRES_PASSWORD=changeme
-  
+
 volumes:
   dev-db-data:
+  dev-static-data:
 
 
 

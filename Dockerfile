@@ -33,7 +33,11 @@ RUN python -m venv /py && \
     adduser \
         -D \
         -H \
-        django-user
+        django-user && \
+    mkdir -p /vol/web/media && \
+    mkdir -p /vol/web/static && \
+    chown -R django-user:django-user /vol && \
+    chmod -R 755 /vol
 # creates a new image layer with multiple commands
 # 1. create virtual env
 # 2. install and upgrade pip inside virtual env
@@ -48,6 +52,10 @@ RUN python -m venv /py && \
     # 7a. disable password so login is automatic
     # 7b. no need to make new home directory for user, keep lightweight
     # 7c. name the user, can name it anything
+# 8. create media directories after user so user can have permissions to directory
+    # -p creates sub directories
+# 9. change owner of directory, recursively, to django user
+# 10. change mode, permissions of directory, recursively, to ensure django-user can make any changes to directory (755)
 
 ENV PATH="/py/bin:$PATH"
 # updates env variable with PATH
